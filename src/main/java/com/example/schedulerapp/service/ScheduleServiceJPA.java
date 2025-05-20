@@ -1,5 +1,6 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.entity.Schedule;
 import com.example.schedulerapp.repository.ScheduleRepository;
@@ -34,7 +35,14 @@ public class ScheduleServiceJPA implements ScheduleService {
 
 
     @Override
-    public List<ScheduleResponseDto> findAll() {
-        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::toDto).toList();
+    public List<ScheduleTimeIncludedResponseDto> findAll() {
+        return scheduleRepository.findAll().stream().map(ScheduleTimeIncludedResponseDto::toDto).toList();
+    }
+
+    @Override
+    public ScheduleTimeIncludedResponseDto findById(Long id) {
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
     }
 }

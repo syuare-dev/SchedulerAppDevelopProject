@@ -6,13 +6,13 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "schedule")
-public class Schedule extends BaseEntity {
+public class Schedule extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
