@@ -37,7 +37,7 @@ public class ScheduleServiceJPA implements ScheduleService {
 
 
     @Override
-    public List<ScheduleTimeIncludedResponseDto> findAllSchedule() {
+    public List<ScheduleTimeIncludedResponseDto> findAllSchedules() {
         return scheduleRepository.findAll().stream().map(ScheduleTimeIncludedResponseDto::toDto).toList();
     }
 
@@ -57,4 +57,13 @@ public class ScheduleServiceJPA implements ScheduleService {
 
         return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername());
     }
+
+    @Override
+    public void deleteSchedule(Long id) {
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        scheduleRepository.delete(findSchedule);
+    }
+
+
 }
