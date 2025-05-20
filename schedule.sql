@@ -33,7 +33,8 @@ GROUP BY schedules.username, schedules.created_at, schedules.modified_at;
 /* schedules 와 users 테이블 JOIN > s.user_id 에 u.id 값 없데이트 */
 UPDATE schedules s
     JOIN users u ON s.username = u.name
-SET s.user_id = u.id;
+SET s.user_id = u.id
+WHERE s.user_id = 0;
 
 /* user_id 외래 키(FK) 선언 */
 ALTER TABLE schedules
