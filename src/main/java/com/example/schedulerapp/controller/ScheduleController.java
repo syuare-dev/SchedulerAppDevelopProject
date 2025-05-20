@@ -1,6 +1,7 @@
 package com.example.schedulerapp.controller;
 
 import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
+import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,18 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll () {
-        List<ScheduleResponseDto> scheduleResponseDtoList = scheduleService.findAll();
+    public ResponseEntity<List<ScheduleTimeIncludedResponseDto>> findAll () {
+        List<ScheduleTimeIncludedResponseDto> scheduleTimeIncludedResponseDto = scheduleService.findAll();
 
-        return new ResponseEntity<>(scheduleResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleTimeIncludedResponseDto> findById(@PathVariable Long id) {
+        ScheduleTimeIncludedResponseDto scheduleTimeIncludedResponseDto = scheduleService.findById(id);
+
+        return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
+    }
+
 
 }
