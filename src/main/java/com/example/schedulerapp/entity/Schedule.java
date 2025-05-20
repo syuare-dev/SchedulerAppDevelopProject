@@ -1,10 +1,11 @@
 package com.example.schedulerapp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
+@Entity
+@Table(name = "schedule")
 public class Schedule extends BaseEntity {
 
     @Id
@@ -20,4 +21,12 @@ public class Schedule extends BaseEntity {
     @Column(columnDefinition = "longtext")
     private String contents;
 
+    public Schedule() {
+    }
+
+    public Schedule(String username, String title, String contents) {
+        this.username = username;
+        this.title = title;
+        this.contents = contents;
+    }
 }
