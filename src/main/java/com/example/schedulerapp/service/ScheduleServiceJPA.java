@@ -1,11 +1,13 @@
 package com.example.schedulerapp.service;
 
-import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
+import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
+import com.example.schedulerapp.dto.scheduleDto.UpdateScheduleRequestDto;
 import com.example.schedulerapp.entity.Schedule;
 import com.example.schedulerapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,14 +37,24 @@ public class ScheduleServiceJPA implements ScheduleService {
 
 
     @Override
-    public List<ScheduleTimeIncludedResponseDto> findAll() {
+    public List<ScheduleTimeIncludedResponseDto> findAllSchedule() {
         return scheduleRepository.findAll().stream().map(ScheduleTimeIncludedResponseDto::toDto).toList();
     }
 
     @Override
-    public ScheduleTimeIncludedResponseDto findById(Long id) {
+    public ScheduleTimeIncludedResponseDto findByIdSchedule(Long id) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
+    }
+
+    @Transactional
+    @Override
+    public ScheduleResponseDto updatedByIdSchedule(Long id, UpdateScheduleRequestDto requestDto) {
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+
+        findSchedule.updateSchedule(requestDto.getUsername(), requestDto.getTitle(), requestDto.getContents());
+
+        return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername());
     }
 }

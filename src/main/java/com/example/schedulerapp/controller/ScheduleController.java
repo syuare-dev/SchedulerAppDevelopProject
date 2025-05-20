@@ -3,6 +3,7 @@ package com.example.schedulerapp.controller;
 import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
+import com.example.schedulerapp.dto.scheduleDto.UpdateScheduleRequestDto;
 import com.example.schedulerapp.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,17 +33,27 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleTimeIncludedResponseDto>> findAll () {
-        List<ScheduleTimeIncludedResponseDto> scheduleTimeIncludedResponseDto = scheduleService.findAll();
+    public ResponseEntity<List<ScheduleTimeIncludedResponseDto>> findAllSchedule() {
+        List<ScheduleTimeIncludedResponseDto> scheduleTimeIncludedResponseDto = scheduleService.findAllSchedule();
 
         return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleTimeIncludedResponseDto> findById(@PathVariable Long id) {
-        ScheduleTimeIncludedResponseDto scheduleTimeIncludedResponseDto = scheduleService.findById(id);
+    public ResponseEntity<ScheduleTimeIncludedResponseDto> findByIdSchedule(@PathVariable Long id) {
+        ScheduleTimeIncludedResponseDto scheduleTimeIncludedResponseDto = scheduleService.findByIdSchedule(id);
 
         return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ScheduleResponseDto> updateSchedule (
+            @PathVariable Long id,
+            @RequestBody UpdateScheduleRequestDto requestDto
+    ) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updatedByIdSchedule(id, requestDto);
+
+        return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
 
 
