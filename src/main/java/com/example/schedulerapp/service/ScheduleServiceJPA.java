@@ -4,7 +4,9 @@ import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.UpdateScheduleRequestDto;
 import com.example.schedulerapp.entity.Schedule;
+import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.ScheduleRepository;
+import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ScheduleServiceJPA implements ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
 
     /**
@@ -26,13 +29,16 @@ public class ScheduleServiceJPA implements ScheduleService {
      * @return schedule Entity 의 id, title, contents 값을 ResponseDto 로 반환
      */
     @Override
-    public ScheduleResponseDto saveSchedule(String username, String title, String contents) {
+    public ScheduleResponseDto saveSchedule(String title, String contents, String username) {
 
-        Schedule schedule = new Schedule(username, title, contents);
+        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
 
-        scheduleRepository.save(schedule);
+        Schedule schedule = new Schedule(title, contents);
+        schedule.setUser(findUser);
 
-        return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContents(), schedule.getUsername());
+        Schedule savedSchedule = scheduleRepository.save(schedule);
+
+        return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getUser().getName());
     }
 
 
@@ -45,7 +51,7 @@ public class ScheduleServiceJPA implements ScheduleService {
     public ScheduleTimeIncludedResponseDto findByIdSchedule(Long id) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
+        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
     }
 
     @Transactional
@@ -53,9 +59,9 @@ public class ScheduleServiceJPA implements ScheduleService {
     public ScheduleResponseDto updatedByIdSchedule(Long id, UpdateScheduleRequestDto requestDto) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        findSchedule.updateSchedule(requestDto.getUsername(), requestDto.getTitle(), requestDto.getContents());
+        findSchedule.updateSchedule(requestDto.getUser(), requestDto.getTitle(), requestDto.getContents());
 
-        return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUsername());
+        return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName());
     }
 
     @Override
