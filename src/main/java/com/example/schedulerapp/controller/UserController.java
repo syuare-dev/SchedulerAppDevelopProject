@@ -2,14 +2,14 @@ package com.example.schedulerapp.controller;
 
 import com.example.schedulerapp.dto.userDto.UserSignUpRequestDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
+import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
 import com.example.schedulerapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,5 +24,19 @@ public class UserController {
         UserSignUpResponseDto userResponseDto = userService.signUp(requestDto.getName(), requestDto.getEmail());
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserTimeIncludeResponseDto>> findByAllUsers() {
+        List<UserTimeIncludeResponseDto> userTimeIncludeResponseDto = userService.findAllUsers();
+
+        return new ResponseEntity<>(userTimeIncludeResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserTimeIncludeResponseDto> findByIdUser(@PathVariable Long id) {
+        UserTimeIncludeResponseDto userTimeIncludeResponseDto = userService.findByIdUser(id);
+
+        return new ResponseEntity<>(userTimeIncludeResponseDto, HttpStatus.OK);
     }
 }
