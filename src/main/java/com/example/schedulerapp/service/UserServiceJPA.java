@@ -1,11 +1,14 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.userDto.UpdateUserRequestDto;
+import com.example.schedulerapp.dto.userDto.UserResponseDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
 import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,7 +22,6 @@ public class UserServiceJPA implements UserService {
     public UserSignUpResponseDto signUp(String name, String email) {
 
         User user = new User(name, email);
-
         User savedUser = userRepository.save(user);
 
         return new UserSignUpResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
@@ -36,5 +38,15 @@ public class UserServiceJPA implements UserService {
         User findUser = userRepository.findByIdOrElseThrow(id);
 
         return new UserTimeIncludeResponseDto(findUser.getId(), findUser.getName(), findUser.getEmail(), findUser.getCreatedAt(), findUser.getModifiedAt());
+    }
+
+    @Transactional
+    @Override
+    public UserResponseDto updateByIdUser(Long id, UpdateUserRequestDto requestDto) {
+
+        User findUser = userRepository.findByIdOrElseThrow(id);
+        findUser.updateUser(requestDto.getName(), requestDto.getEmail());
+
+        return new UserResponseDto(findUser.getName(), findUser.getEmail());
     }
 }
