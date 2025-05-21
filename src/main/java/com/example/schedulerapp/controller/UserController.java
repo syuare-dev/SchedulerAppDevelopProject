@@ -1,7 +1,7 @@
 package com.example.schedulerapp.controller;
 
-import com.example.schedulerapp.dto.userDto.UserRequestDto;
-import com.example.schedulerapp.dto.userDto.UserResponseDto;
+import com.example.schedulerapp.dto.userDto.UserSignUpRequestDto;
+import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,9 +19,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> UserSignUp(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<UserSignUpResponseDto> UserSignUp(@RequestBody UserSignUpRequestDto requestDto) {
 
-        UserResponseDto userResponseDto = userService.signUp(requestDto.getName(), requestDto.getEmail());
+        UserSignUpResponseDto userResponseDto = userService.signUp(requestDto.getName(), requestDto.getEmail());
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }

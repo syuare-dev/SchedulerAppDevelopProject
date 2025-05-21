@@ -1,8 +1,8 @@
 package com.example.schedulerapp.service;
 
-import com.example.schedulerapp.dto.userDto.UserResponseDto;
+import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 
 public interface UserService {
 
-    UserResponseDto signUp(String name, String email);
+    UserSignUpResponseDto signUp(String name, String email);
 }
