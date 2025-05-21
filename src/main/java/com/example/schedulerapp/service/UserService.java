@@ -1,5 +1,7 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.userDto.UpdateUserRequestDto;
+import com.example.schedulerapp.dto.userDto.UserResponseDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
 
@@ -12,4 +14,6 @@ public interface UserService {
     List<UserTimeIncludeResponseDto> findAllUsers();
 
     UserTimeIncludeResponseDto findByIdUser(Long id);
+
+    UserResponseDto updateByIdUser(Long id, UpdateUserRequestDto requestDto);
 }

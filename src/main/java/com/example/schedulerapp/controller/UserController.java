@@ -1,8 +1,6 @@
 package com.example.schedulerapp.controller;
 
-import com.example.schedulerapp.dto.userDto.UserSignUpRequestDto;
-import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
-import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
+import com.example.schedulerapp.dto.userDto.*;
 import com.example.schedulerapp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,5 +36,13 @@ public class UserController {
         UserTimeIncludeResponseDto userTimeIncludeResponseDto = userService.findByIdUser(id);
 
         return new ResponseEntity<>(userTimeIncludeResponseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping({"/{id}"})
+    public ResponseEntity<UserResponseDto> updateByIdUser(@PathVariable Long id, @RequestBody UpdateUserRequestDto requestDto) {
+
+        UserResponseDto updateUser = userService.updateByIdUser(id, requestDto);
+
+        return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 }
