@@ -37,7 +37,7 @@ public class ScheduleTimeIncludedResponseDto {
                 schedule.getId(),
                 schedule.getTitle(),
                 schedule.getContents(),
-                schedule.getUsername(),
+                schedule.getUser().getName(),
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
         );
