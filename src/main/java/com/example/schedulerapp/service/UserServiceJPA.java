@@ -19,9 +19,9 @@ public class UserServiceJPA implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserSignUpResponseDto signUp(String name, String email) {
+    public UserSignUpResponseDto signUp(String name, String email, String password) {
 
-        User user = new User(name, email);
+        User user = new User(name, email, password);
         User savedUser = userRepository.save(user);
 
         return new UserSignUpResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
