@@ -49,4 +49,11 @@ public class UserServiceJPA implements UserService {
 
         return new UserResponseDto(findUser.getName(), findUser.getEmail());
     }
+
+    @Override
+    public void deleteByIdUser(Long id) {
+        User findUser = userRepository.findByIdOrElseThrow(id);
+
+        userRepository.delete(findUser);
+    }
 }
