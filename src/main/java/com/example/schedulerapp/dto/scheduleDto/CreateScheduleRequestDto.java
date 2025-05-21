@@ -11,9 +11,9 @@ public class CreateScheduleRequestDto {
 
     private final String contents;
 
-    public CreateScheduleRequestDto(String username, String title, String contents) {
-        this.username = username;
+    public CreateScheduleRequestDto(String title, String contents, String username) {
         this.title = title;
         this.contents = contents;
+        this.username = username;
     }
 }
