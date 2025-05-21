@@ -3,7 +3,7 @@ package com.example.schedulerapp.dto.userDto;
 import lombok.Getter;
 
 @Getter
-public class UserResponseDto {
+public class UserSignUpResponseDto {
 
     private final Long id;
 
@@ -11,7 +11,7 @@ public class UserResponseDto {
 
     private final String email;
 
-    public UserResponseDto(Long id, String name, String email) {
+    public UserSignUpResponseDto(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
