@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    UserSignUpResponseDto signUp(String name, String email);
+    UserSignUpResponseDto signUp(String name, String email, String password);
 
     List<UserTimeIncludeResponseDto> findAllUsers();
 

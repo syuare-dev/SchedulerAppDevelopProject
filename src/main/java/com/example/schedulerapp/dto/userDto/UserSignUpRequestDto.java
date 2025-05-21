@@ -8,8 +8,11 @@ public class UserSignUpRequestDto {
 
     private final String email;
 
-    public UserSignUpRequestDto(String name, String email) {
+    private final String password;
+
+    public UserSignUpRequestDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 }

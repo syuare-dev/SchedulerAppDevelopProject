@@ -18,7 +18,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
 
     // 유저와 관련된 일정들을 한번에 조회 목적 > User -> Schedule 방향 관계 설정
     @OneToMany(mappedBy = "user")
@@ -27,9 +31,10 @@ public class User extends BaseTimeEntity {
     public User() {
     }
 
-    public User(String name, String email) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public void updateUser(String name, String email) {
