@@ -51,7 +51,7 @@ public class ScheduleServiceJPA implements ScheduleService {
     public ScheduleTimeIncludedResponseDto findByIdSchedule(Long id) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
+        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
     }
 
     @Transactional
