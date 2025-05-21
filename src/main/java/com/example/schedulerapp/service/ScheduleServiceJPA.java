@@ -2,7 +2,6 @@ package com.example.schedulerapp.service;
 
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
-import com.example.schedulerapp.dto.scheduleDto.UpdateScheduleRequestDto;
 import com.example.schedulerapp.entity.Schedule;
 import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.ScheduleRepository;
@@ -56,10 +55,13 @@ public class ScheduleServiceJPA implements ScheduleService {
 
     @Transactional
     @Override
-    public ScheduleResponseDto updatedByIdSchedule(Long id, UpdateScheduleRequestDto requestDto) {
+    public ScheduleResponseDto updatedByIdSchedule(Long id, String title, String contents, String username) {
+
+        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        findSchedule.updateSchedule(requestDto.getUser(), requestDto.getTitle(), requestDto.getContents());
+        findSchedule.setUser(findUser);
+        findSchedule.updateSchedule(title, contents);
 
         return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName());
     }
