@@ -16,4 +16,6 @@ public interface UserService {
     UserTimeIncludeResponseDto findByIdUser(Long id);
 
     UserResponseDto updateByIdUser(Long id, UpdateUserRequestDto requestDto);
+
+    void deleteByIdUser(Long id);
 }
