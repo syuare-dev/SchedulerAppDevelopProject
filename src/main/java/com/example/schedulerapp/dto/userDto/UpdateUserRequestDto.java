@@ -1,16 +1,15 @@
 package com.example.schedulerapp.dto.userDto;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 
 @Getter
 public class UpdateUserRequestDto {
 
+    @Column(nullable = false)
     private final String name;
 
-    private final String email;
-
-    public UpdateUserRequestDto(String name, String email) {
+    public UpdateUserRequestDto(String name) {
         this.name = name;
-        this.email = email;
     }
 }
