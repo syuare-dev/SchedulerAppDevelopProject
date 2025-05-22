@@ -1,14 +1,17 @@
 package com.example.schedulerapp.service;
 
-import com.example.schedulerapp.dto.userDto.UpdateUserRequestDto;
+import com.example.schedulerapp.dto.loginDto.LoginRequestDto;
+import com.example.schedulerapp.dto.loginDto.UserDto;
 import com.example.schedulerapp.dto.userDto.UserResponseDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
 import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -42,10 +45,10 @@ public class UserServiceJPA implements UserService {
 
     @Transactional
     @Override
-    public UserResponseDto updateByIdUser(Long id, UpdateUserRequestDto requestDto) {
+    public UserResponseDto updateByIdUser(Long id, String name) {
 
         User findUser = userRepository.findByIdOrElseThrow(id);
-        findUser.updateUser(requestDto.getName(), requestDto.getEmail());
+        findUser.updateUser(name);
 
         return new UserResponseDto(findUser.getName(), findUser.getEmail());
     }
@@ -55,5 +58,17 @@ public class UserServiceJPA implements UserService {
         User findUser = userRepository.findByIdOrElseThrow(id);
 
         userRepository.delete(findUser);
+    }
+
+    @Override
+    public UserDto login(LoginRequestDto requestDto) {
+
+        User user = userRepository.findUserByEmailOrElseThrow(requestDto.getEmail());
+
+        if (!requestDto.getPassword().equals(user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password you entered is incorrect.");
+        }
+
+        return new UserDto(user.getId(), user.getName());
     }
 }
