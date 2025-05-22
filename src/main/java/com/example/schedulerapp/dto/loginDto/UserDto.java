@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UserDto {
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 
     public UserDto(Long id, String name) {
         this.id = id;

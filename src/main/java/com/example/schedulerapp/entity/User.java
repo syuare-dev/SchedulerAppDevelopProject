@@ -18,7 +18,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -37,8 +37,7 @@ public class User extends BaseTimeEntity {
         this.password = password;
     }
 
-    public void updateUser(String name, String email) {
+    public void updateUser(String name) {
         this.name = name;
-        this.email = email;
     }
 }
