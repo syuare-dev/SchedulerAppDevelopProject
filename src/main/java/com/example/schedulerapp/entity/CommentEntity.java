@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "comments")
-public class Comment extends BaseTimeEntity {
+public class CommentEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +29,10 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Comment() {
+    public CommentEntity() {
     }
 
-    public Comment(String comment) {
+    public CommentEntity(String comment) {
         this.comment = comment;
     }
 }
