@@ -2,6 +2,7 @@ package com.example.schedulerapp.controller;
 
 import com.example.schedulerapp.dto.scheduleDto.*;
 import com.example.schedulerapp.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -21,14 +22,14 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> saveSchedule(@RequestBody @Valid CreateScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> saveSchedule(
+            @RequestBody @Valid CreateScheduleRequestDto requestDto,
+            HttpServletRequest servletRequest
+    ) {
 
-        ScheduleResponseDto scheduleResponseDto =
-                scheduleService.saveSchedule(
-                        requestDto.getTitle(),
-                        requestDto.getContents(),
-                        requestDto.getUsername()
-                );
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        ScheduleResponseDto scheduleResponseDto = scheduleService.saveSchedule(requestDto, userId);
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.CREATED);
     }

@@ -1,5 +1,6 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
 import com.example.schedulerapp.dto.scheduleDto.PageScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
@@ -31,11 +32,11 @@ public class ScheduleServiceJPA implements ScheduleService {
      * @return schedule Entity 의 id, title, contents 값을 ResponseDto 로 반환
      */
     @Override
-    public ScheduleResponseDto saveSchedule(String title, String contents, String username) {
+    public ScheduleResponseDto saveSchedule(CreateScheduleRequestDto requestDto, Long userId) {
 
-        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
+        User findUser = userRepository.findByIdOrElseThrow(userId);
 
-        Schedule schedule = new Schedule(title, contents);
+        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContents());
         schedule.setUser(findUser);
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
