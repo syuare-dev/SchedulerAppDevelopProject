@@ -60,8 +60,12 @@ public class UserServiceJPA implements UserService {
     }
 
     @Override
-    public void deleteByIdUser(Long id) {
+    public void deleteByIdUser(Long id, Long userId) {
         User findUser = userRepository.findByIdOrElseThrow(id);
+
+        if (!findUser.getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only delete your own account.");
+        }
 
         userRepository.delete(findUser);
     }
