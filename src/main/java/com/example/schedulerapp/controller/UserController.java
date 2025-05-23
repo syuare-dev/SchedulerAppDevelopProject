@@ -54,10 +54,14 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteByIdUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteByIdUser(@PathVariable Long id, HttpServletRequest servletRequest) {
 
-        userService.deleteByIdUser(id);
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        userService.deleteByIdUser(id, userId);
+
+        servletRequest.getSession(false).invalidate();
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -19,7 +19,7 @@ public interface UserService {
 
     UserResponseDto updateByMyInfo(UpdateUserRequestDto requestDto, Long userid);
 
-    void deleteByIdUser(Long id);
+    void deleteByIdUser(Long id, Long userId);
 
     UserDto login(LoginRequestDto requestDto);
 }
