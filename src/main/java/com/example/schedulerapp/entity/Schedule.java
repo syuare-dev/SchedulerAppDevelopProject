@@ -1,10 +1,10 @@
 package com.example.schedulerapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Entity
@@ -18,8 +18,8 @@ public class Schedule extends BaseTimeEntity {
 //    @Column(nullable = false)
 //    private String username;
 
-    @NotEmpty
-    @Range(max=16)
+    @NotNull
+    @Length(min=1, max=16)
     private String title;
 
     @Column(columnDefinition = "longtext")

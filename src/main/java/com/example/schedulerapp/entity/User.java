@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @NotBlank
-    @Range(min=4, max=20)
     @Column(unique = true)
     private String name;
 
@@ -29,7 +27,7 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @NotBlank
-    @Pattern(regexp = "^(?!.*\\s).+${4,20}", message = "비밀번호에 띄어쓰기를 포함할 수 없습니다.")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()-+=]).{4,}$", message = "비밀번호는 최소 4글자 이상이어야 하며 대문자/숫자/소문자/특수문자가 포함되어 있어야 합니다 ")
     private String password;
 
     // 유저와 관련된 일정들을 한번에 조회 목적 > User -> Schedule 방향 관계 설정

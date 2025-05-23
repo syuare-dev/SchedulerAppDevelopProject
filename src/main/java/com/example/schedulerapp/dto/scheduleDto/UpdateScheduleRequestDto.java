@@ -1,9 +1,9 @@
 package com.example.schedulerapp.dto.scheduleDto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 public class UpdateScheduleRequestDto {
@@ -11,8 +11,8 @@ public class UpdateScheduleRequestDto {
     @NotBlank
     private final String username;
 
-    @NotEmpty
-    @Range(max=16, message = "title 은 최대 16자까지 작성할 수 있습니다.")
+    @NotNull
+    @Length(min=1, max=16)
     private final String title;
 
     private final String contents;
