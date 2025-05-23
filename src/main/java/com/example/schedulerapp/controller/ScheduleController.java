@@ -74,8 +74,11 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId, HttpServletRequest servletRequest) {
+
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        scheduleService.deleteSchedule(scheduleId, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
