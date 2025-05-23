@@ -3,6 +3,7 @@ package com.example.schedulerapp.service;
 import com.example.schedulerapp.config.PasswordEncoder;
 import com.example.schedulerapp.dto.loginDto.LoginRequestDto;
 import com.example.schedulerapp.dto.loginDto.UserDto;
+import com.example.schedulerapp.dto.userDto.UpdateUserRequestDto;
 import com.example.schedulerapp.dto.userDto.UserResponseDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
@@ -49,10 +50,11 @@ public class UserServiceJPA implements UserService {
 
     @Transactional
     @Override
-    public UserResponseDto updateByIdUser(Long id, String name) {
+    public UserResponseDto updateByMyInfo(UpdateUserRequestDto requestDto, Long userid) {
 
-        User findUser = userRepository.findByIdOrElseThrow(id);
-        findUser.updateUser(name);
+        User findUser = userRepository.findByIdOrElseThrow(userid);
+
+        findUser.updateUser(requestDto.getName());
 
         return new UserResponseDto(findUser.getName(), findUser.getEmail());
     }
@@ -68,10 +70,6 @@ public class UserServiceJPA implements UserService {
     public UserDto login(LoginRequestDto requestDto) {
 
         User user = userRepository.findUserByEmailOrElseThrow(requestDto.getEmail());
-
-//        if (!requestDto.getPassword().equals(user.getPassword())) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password you entered is incorrect.");
-//        }
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password you entered is incorrect.");

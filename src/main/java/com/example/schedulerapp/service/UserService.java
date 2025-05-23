@@ -2,6 +2,7 @@ package com.example.schedulerapp.service;
 
 import com.example.schedulerapp.dto.loginDto.LoginRequestDto;
 import com.example.schedulerapp.dto.loginDto.UserDto;
+import com.example.schedulerapp.dto.userDto.UpdateUserRequestDto;
 import com.example.schedulerapp.dto.userDto.UserResponseDto;
 import com.example.schedulerapp.dto.userDto.UserSignUpResponseDto;
 import com.example.schedulerapp.dto.userDto.UserTimeIncludeResponseDto;
@@ -16,7 +17,7 @@ public interface UserService {
 
     UserTimeIncludeResponseDto findByIdUser(Long id);
 
-    UserResponseDto updateByIdUser(Long id, String name);
+    UserResponseDto updateByMyInfo(UpdateUserRequestDto requestDto, Long userid);
 
     void deleteByIdUser(Long id);
 
