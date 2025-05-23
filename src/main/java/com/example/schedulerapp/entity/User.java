@@ -2,7 +2,10 @@ package com.example.schedulerapp.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Range;
 
 import java.util.List;
 
@@ -15,13 +18,18 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Range(min=4, max=20)
+    @Column(unique = true)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식에 맞지 않습니다.")
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Pattern(regexp = "^(?!.*\\s).+${4,20}", message = "비밀번호에 띄어쓰기를 포함할 수 없습니다.")
     private String password;
 
     // 유저와 관련된 일정들을 한번에 조회 목적 > User -> Schedule 방향 관계 설정
