@@ -80,8 +80,12 @@ public class ScheduleServiceJPA implements ScheduleService {
     }
 
     @Override
-    public void deleteSchedule(Long id) {
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+    public void deleteSchedule(Long scheduleId, Long userId) {
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        if (!findSchedule.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the author of the schedule can delete it.");
+        }
 
         scheduleRepository.delete(findSchedule);
     }
