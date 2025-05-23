@@ -1,5 +1,6 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.scheduleDto.PageScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
 import com.example.schedulerapp.entity.Schedule;
@@ -7,6 +8,8 @@ import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.ScheduleRepository;
 import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +47,14 @@ public class ScheduleServiceJPA implements ScheduleService {
     @Override
     public List<ScheduleTimeIncludedResponseDto> findAllSchedules() {
         return scheduleRepository.findAll().stream().map(ScheduleTimeIncludedResponseDto::toDto).toList();
+    }
+
+    @Override
+    public PageScheduleResponseDto<ScheduleTimeIncludedResponseDto> getSchedules(Pageable pageable) {
+        Page<Schedule> page = scheduleRepository.findAll(pageable);
+        Page<ScheduleTimeIncludedResponseDto> dtoPage = page.map(ScheduleTimeIncludedResponseDto::toDto);
+
+        return new PageScheduleResponseDto<>(dtoPage);
     }
 
     @Override

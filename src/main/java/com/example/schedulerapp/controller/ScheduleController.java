@@ -1,12 +1,12 @@
 package com.example.schedulerapp.controller;
 
-import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
-import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
-import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerapp.dto.scheduleDto.UpdateScheduleRequestDto;
+import com.example.schedulerapp.dto.scheduleDto.*;
 import com.example.schedulerapp.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +38,17 @@ public class ScheduleController {
         List<ScheduleTimeIncludedResponseDto> scheduleTimeIncludedResponseDto = scheduleService.findAllSchedules();
 
         return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/paging")
+    public ResponseEntity<PageScheduleResponseDto<ScheduleTimeIncludedResponseDto>> getSchedules(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
+        PageScheduleResponseDto<ScheduleTimeIncludedResponseDto> pagingResult = scheduleService.getSchedules(pageable);
+
+        return new ResponseEntity<>(pagingResult, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
