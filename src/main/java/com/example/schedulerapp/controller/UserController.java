@@ -2,10 +2,10 @@ package com.example.schedulerapp.controller;
 
 import com.example.schedulerapp.dto.userDto.*;
 import com.example.schedulerapp.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserSignUpResponseDto> UserSignUp(@RequestBody UserSignUpRequestDto requestDto) {
+    public ResponseEntity<UserSignUpResponseDto> UserSignUp(@RequestBody @Valid UserSignUpRequestDto requestDto) {
 
         UserSignUpResponseDto userResponseDto = userService.signUp(requestDto.getName(), requestDto.getEmail(), requestDto.getPassword());
 
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PatchMapping({"/{id}"})
-    public ResponseEntity<UserResponseDto> updateByIdUser(@PathVariable Long id, @RequestBody @Validated UpdateUserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> updateByIdUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto requestDto) {
 
         UserResponseDto updateUser = userService.updateByIdUser(id, requestDto.getName());
 
