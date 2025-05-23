@@ -1,9 +1,6 @@
 package com.example.schedulerapp.service;
 
-import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
-import com.example.schedulerapp.dto.scheduleDto.PageScheduleResponseDto;
-import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
-import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
+import com.example.schedulerapp.dto.scheduleDto.*;
 import com.example.schedulerapp.entity.Schedule;
 import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.ScheduleRepository;
@@ -11,8 +8,10 @@ import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class ScheduleServiceJPA implements ScheduleService {
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getUser().getName());
+        return new ScheduleResponseDto(savedSchedule.getTitle(), savedSchedule.getContents(), savedSchedule.getUser().getName());
     }
 
 
@@ -67,15 +66,17 @@ public class ScheduleServiceJPA implements ScheduleService {
 
     @Transactional
     @Override
-    public ScheduleResponseDto updatedByIdSchedule(Long id, String title, String contents, String username) {
+    public ScheduleResponseDto updatedByIdSchedule(Long scheduleId, UpdateScheduleRequestDto requestDto, Long userId) {
 
-        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
-        findSchedule.setUser(findUser);
-        findSchedule.updateSchedule(title, contents);
+        if (!findSchedule.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the author of the schedule can modify it.");
+        }
 
-        return new ScheduleResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName());
+        findSchedule.updateSchedule(requestDto.getTitle(), requestDto.getContents());
+
+        return new ScheduleResponseDto(findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName());
     }
 
     @Override

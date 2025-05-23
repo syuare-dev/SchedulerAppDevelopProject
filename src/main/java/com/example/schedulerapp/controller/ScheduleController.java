@@ -52,32 +52,30 @@ public class ScheduleController {
         return new ResponseEntity<>(pagingResult, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ScheduleTimeIncludedResponseDto> findByIdSchedule(@PathVariable Long id) {
-        ScheduleTimeIncludedResponseDto scheduleTimeIncludedResponseDto = scheduleService.findByIdSchedule(id);
+    @GetMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleTimeIncludedResponseDto> findByIdSchedule(@PathVariable Long scheduleId) {
+        ScheduleTimeIncludedResponseDto scheduleTimeIncludedResponseDto = scheduleService.findByIdSchedule(scheduleId);
 
         return new ResponseEntity<>(scheduleTimeIncludedResponseDto, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{scheduleId}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule (
-            @PathVariable Long id,
-            @RequestBody @Valid UpdateScheduleRequestDto requestDto
+            @PathVariable Long scheduleId,
+            @RequestBody @Valid UpdateScheduleRequestDto requestDto,
+            HttpServletRequest servletRequest
     ) {
-        ScheduleResponseDto scheduleResponseDto =
-                scheduleService.updatedByIdSchedule(
-                        id,
-                        requestDto.getTitle(),
-                        requestDto.getContents(),
-                        requestDto.getUsername()
-                );
+
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        ScheduleResponseDto scheduleResponseDto = scheduleService.updatedByIdSchedule(scheduleId, requestDto, userId);
 
         return new ResponseEntity<>(scheduleResponseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable Long id) {
-        scheduleService.deleteSchedule(id);
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
