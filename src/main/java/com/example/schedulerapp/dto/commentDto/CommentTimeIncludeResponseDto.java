@@ -14,6 +14,8 @@ public class CommentTimeIncludeResponseDto {
 
     private final String username;
 
+    private final Long scheduleId;
+
     private final String scheduleTitle;
 
     private final String comment;
@@ -26,6 +28,7 @@ public class CommentTimeIncludeResponseDto {
         return new CommentTimeIncludeResponseDto(
                 comment.getId(),
                 comment.getUser().getName(),
+                comment.getSchedule().getId(),
                 comment.getSchedule().getTitle(),
                 comment.getComment(),
                 comment.getCreatedAt(),

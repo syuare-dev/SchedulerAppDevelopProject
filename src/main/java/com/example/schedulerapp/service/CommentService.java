@@ -10,6 +10,8 @@ public interface CommentService {
 
     CommentResponseDto saveComment(Long id, CommentRequestDto requestDto);
 
-    List<CommentTimeIncludeResponseDto> findAllComments();
+    List<CommentTimeIncludeResponseDto> findAllComments(Long scheduleId);
+
+    CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto);
 
 }

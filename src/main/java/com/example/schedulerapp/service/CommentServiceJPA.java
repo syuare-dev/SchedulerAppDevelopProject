@@ -10,7 +10,10 @@ import com.example.schedulerapp.repository.CommentRepository;
 import com.example.schedulerapp.repository.ScheduleRepository;
 import com.example.schedulerapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,12 +28,12 @@ public class CommentServiceJPA implements CommentService {
     @Override
     public CommentResponseDto saveComment(Long id, CommentRequestDto requestDto) {
 
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
         User findUser = userRepository.findUserByUsernameOrElseThrow(requestDto.getUsername());
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
         CommentEntity comment = new CommentEntity(requestDto.getComment());
-        comment.setSchedule(findSchedule);
         comment.setUser(findUser);
+        comment.setSchedule(findSchedule);
 
         CommentEntity savedComment = commentRepository.save(comment);
 
@@ -38,7 +41,27 @@ public class CommentServiceJPA implements CommentService {
     }
 
     @Override
-    public List<CommentTimeIncludeResponseDto> findAllComments() {
-        return commentRepository.findAll().stream().map(CommentTimeIncludeResponseDto::toDto).toList();
+    public List<CommentTimeIncludeResponseDto> findAllComments(Long scheduleId) {
+
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        return findSchedule.getComments().stream().map(CommentTimeIncludeResponseDto::toDto).toList();
+    }
+
+    @Transactional
+    @Override
+    public CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto) {
+
+        scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId);
+
+        if (!findComment.getSchedule().getId().equals(scheduleId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The comment you are currently trying to edit is not a comment for this schedule.");
+        }
+
+        findComment.updateComment(requestDto.getComment());
+
+        return new CommentResponseDto(findComment.getId(), findComment.getComment(), findComment.getUser().getName());
     }
 }

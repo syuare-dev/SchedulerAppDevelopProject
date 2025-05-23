@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "schedule")
@@ -29,6 +31,10 @@ public class Schedule extends BaseTimeEntity {
     @ManyToOne // 여러 일정이 하나의 유저와 연결
     @JoinColumn(name = "user_id") // 실제 DB 에서 FK를 user_id로 설정
     private User user;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<CommentEntity> comments;
+
 
 
     public Schedule() {
