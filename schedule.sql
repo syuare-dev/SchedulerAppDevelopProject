@@ -44,6 +44,52 @@ ALTER TABLE schedules
             ON UPDATE CASCADE;
 
 
+ALTER TABLE schedules
+    DROP COLUMN username;
+
 /* users > password 컬럼 추가 */
 ALTER TABLE users
 ADD COLUMN password VARCHAR(255) COMMENT "비밀번호" AFTER email;
+
+CREATE TABLE comments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '댓글 식별자',
+    comment LONGTEXT COMMENT '댓글 내용',
+    user_id BIGINT NOT NULL DEFAULT 0 COMMENT '유저 식별자 ID',
+    user_name VARCHAR(100) COMMENT '작성 유저 이름',
+    schedule_title VARCHAR(255) COMMENT '할 일 제목',
+    schedule_id BIGINT NOT NULL DEFAULT 0 COMMENT '일정 식별자 ID',
+    created_at DATETIME COMMENT '등록일',
+    modified_at DATETIME COMMENT '수정일'
+);
+
+INSERT INTO comments(user_name)
+SELECT u.name
+FROM users u
+GROUP BY u.name;
+
+INSERT INTO comments(schedule_title)
+SELECT s.title
+FROM schedules s
+GROUP BY s.title;
+
+UPDATE comments c
+    JOIN users u ON c.user_name = u.name
+    JOIN schedules s ON c.schedule_title = s.title
+SET c.user_id = u.id, c.schedule_id = s.id
+WHERE c.user_id = 0 OR c.schedule_id = 0;
+
+ALTER TABLE comments
+    ADD CONSTRAINT FK_comments_users
+        FOREIGN KEY (user_id) REFERENCES users(id)
+            ON DELETE RESTRICT
+            ON UPDATE CASCADE;
+
+ALTER TABLE comments
+    ADD CONSTRAINT FK_comments_schedules
+        FOREIGN KEY (schedule_id) REFERENCES schedules(id)
+            ON DELETE RESTRICT
+            ON UPDATE CASCADE;
+
+ALTER TABLE comments
+    DROP COLUMN user_name,
+    DROP COLUMN schedule_title;
