@@ -16,7 +16,8 @@ public class UserSignUpRequestDto {
     private final String email;
 
     @NotBlank (message = "password 는 필수값 입니다.")
-    @Pattern(regexp = "^(?!.*\\s).+${4,}", message = "비밀번호는 최소 4자 이상이어야 합니다.")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z])(?=.*[!@#$%^&*()-+=]).{4,}$", message = "비밀번호는 최소 4글자 이상이어야 하며 대문자/숫자/소문자/특수문자가 포함되어 있어야 합니다 ")
+
     private final String password;
 
     public UserSignUpRequestDto(String name, String email, String password) {
