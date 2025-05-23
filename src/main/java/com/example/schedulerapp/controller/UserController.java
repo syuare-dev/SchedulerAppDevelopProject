@@ -2,6 +2,7 @@ package com.example.schedulerapp.controller;
 
 import com.example.schedulerapp.dto.userDto.*;
 import com.example.schedulerapp.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,12 +40,17 @@ public class UserController {
         return new ResponseEntity<>(userTimeIncludeResponseDto, HttpStatus.OK);
     }
 
-    @PatchMapping({"/{id}"})
-    public ResponseEntity<UserResponseDto> updateByIdUser(@PathVariable Long id, @RequestBody @Valid UpdateUserRequestDto requestDto) {
+    @PatchMapping
+    public ResponseEntity<UserResponseDto> updateMyInfo(
+            @RequestBody @Valid UpdateUserRequestDto requestDto,
+            HttpServletRequest servletRequest
+    ) {
 
-        UserResponseDto updateUser = userService.updateByIdUser(id, requestDto.getName());
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
 
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+        UserResponseDto updateMyInfo = userService.updateByMyInfo(requestDto, userId);
+
+        return new ResponseEntity<>(updateMyInfo, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
