@@ -1,5 +1,6 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.config.PasswordEncoder;
 import com.example.schedulerapp.dto.loginDto.LoginRequestDto;
 import com.example.schedulerapp.dto.loginDto.UserDto;
 import com.example.schedulerapp.dto.userDto.UserResponseDto;
@@ -20,11 +21,14 @@ import java.util.List;
 public class UserServiceJPA implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserSignUpResponseDto signUp(String name, String email, String password) {
 
-        User user = new User(name, email, password);
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(name, email, encodedPassword);
+
         User savedUser = userRepository.save(user);
 
         return new UserSignUpResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
@@ -65,7 +69,11 @@ public class UserServiceJPA implements UserService {
 
         User user = userRepository.findUserByEmailOrElseThrow(requestDto.getEmail());
 
-        if (!requestDto.getPassword().equals(user.getPassword())) {
+//        if (!requestDto.getPassword().equals(user.getPassword())) {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password you entered is incorrect.");
+//        }
+
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The password you entered is incorrect.");
         }
 
