@@ -18,7 +18,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{scheduleId}")
+    @PostMapping("/{scheduleId}/comment")
     public ResponseEntity<CommentResponseDto> saveComment (@PathVariable Long scheduleId, @RequestBody CommentRequestDto requestDto) {
 
         CommentResponseDto commentResponseDto = commentService.saveComment(scheduleId, requestDto);
@@ -26,11 +26,19 @@ public class CommentController {
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
 
-    @GetMapping("/comments")
-    public ResponseEntity<List<CommentTimeIncludeResponseDto>> findAllComments() {
-        List<CommentTimeIncludeResponseDto> commentTimeIncludeResponseDtoList = commentService.findAllComments();
+    @GetMapping("/{scheduleId}/comments")
+    public ResponseEntity<List<CommentTimeIncludeResponseDto>> findAllComments(@PathVariable Long scheduleId) {
+
+        List<CommentTimeIncludeResponseDto> commentTimeIncludeResponseDtoList = commentService.findAllComments(scheduleId);
         
         return new ResponseEntity<>(commentTimeIncludeResponseDtoList, HttpStatus.OK);
     }
 
+    @PatchMapping("/{scheduleId}/comment/{commentId}")
+    public ResponseEntity<CommentResponseDto> updateCommentById(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestBody CommentRequestDto requestDto) {
+
+        CommentResponseDto commentResponseDto = commentService.updateCommentById(scheduleId, commentId, requestDto);
+
+        return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
+    }
 }
