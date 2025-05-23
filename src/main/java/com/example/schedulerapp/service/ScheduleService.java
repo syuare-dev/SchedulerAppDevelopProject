@@ -1,5 +1,6 @@
 package com.example.schedulerapp.service;
 
+import com.example.schedulerapp.dto.scheduleDto.CreateScheduleRequestDto;
 import com.example.schedulerapp.dto.scheduleDto.PageScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleResponseDto;
 import com.example.schedulerapp.dto.scheduleDto.ScheduleTimeIncludedResponseDto;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    ScheduleResponseDto saveSchedule(String title, String contents, String username);
+    ScheduleResponseDto saveSchedule(CreateScheduleRequestDto requestDto, Long userId);
 
     List<ScheduleTimeIncludedResponseDto> findAllSchedules();
 
