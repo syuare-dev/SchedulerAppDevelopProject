@@ -57,11 +57,25 @@ public class CommentServiceJPA implements CommentService {
         CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId);
 
         if (!findComment.getSchedule().getId().equals(scheduleId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The comment you are currently trying to edit is not a comment for this schedule.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not exist Comment");
         }
 
         findComment.updateComment(requestDto.getComment());
 
         return new CommentResponseDto(findComment.getId(), findComment.getComment(), findComment.getUser().getName());
+    }
+
+    @Override
+    public void deleteCommentById(Long scheduleId, Long commentId) {
+
+        scheduleRepository.findByIdOrElseThrow(scheduleId);
+
+        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId);
+
+        if (!findComment.getSchedule().getId().equals(scheduleId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not exist Comment");
+        }
+
+        commentRepository.delete(findComment);
     }
 }
