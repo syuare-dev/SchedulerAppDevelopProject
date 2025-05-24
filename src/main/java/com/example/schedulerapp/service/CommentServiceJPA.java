@@ -51,14 +51,20 @@ public class CommentServiceJPA implements CommentService {
 
     @Transactional
     @Override
-    public CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto) {
+    public CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto, Long userId) {
 
-        scheduleRepository.findByIdOrElseThrow(scheduleId);
+        scheduleRepository.findByIdOrElseThrow(scheduleId); // 일정 조회
 
-        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId);
+        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId); // 댓글 조회
 
+        // 조회한 댓글이 조회한 일정에 속하는지 확인 절차
         if (!findComment.getSchedule().getId().equals(scheduleId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not exist Comment");
+        }
+
+        // 댓글 작성자가 본인인지 확인 절차
+        if (!findComment.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only modify your own comment.");
         }
 
         findComment.updateComment(requestDto.getComment());

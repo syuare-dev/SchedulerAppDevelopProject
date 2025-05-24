@@ -12,7 +12,7 @@ public interface CommentService {
 
     List<CommentTimeIncludeResponseDto> findAllComments(Long scheduleId);
 
-    CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto);
+    CommentResponseDto updateCommentById(Long scheduleId, Long commentId, CommentRequestDto requestDto, Long userId);
 
     void deleteCommentById(Long scheduleId, Long commentId);
 
