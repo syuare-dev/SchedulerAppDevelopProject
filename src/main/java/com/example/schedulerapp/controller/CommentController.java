@@ -42,9 +42,16 @@ public class CommentController {
     }
 
     @PatchMapping("/{scheduleId}/comment/{commentId}")
-    public ResponseEntity<CommentResponseDto> updateCommentById(@PathVariable Long scheduleId, @PathVariable Long commentId, @RequestBody CommentRequestDto requestDto) {
+    public ResponseEntity<CommentResponseDto> updateCommentById(
+            @PathVariable Long scheduleId,
+            @PathVariable Long commentId,
+            @RequestBody CommentRequestDto requestDto,
+            HttpServletRequest servletRequest
+    ) {
 
-        CommentResponseDto commentResponseDto = commentService.updateCommentById(scheduleId, commentId, requestDto);
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        CommentResponseDto commentResponseDto = commentService.updateCommentById(scheduleId, commentId, requestDto, userId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.OK);
     }
