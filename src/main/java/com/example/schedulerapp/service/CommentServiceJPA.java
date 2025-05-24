@@ -73,14 +73,18 @@ public class CommentServiceJPA implements CommentService {
     }
 
     @Override
-    public void deleteCommentById(Long scheduleId, Long commentId) {
+    public void deleteCommentById(Long scheduleId, Long commentId, Long userId) {
 
-        scheduleRepository.findByIdOrElseThrow(scheduleId);
+        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId); // 댓글 조회
 
-        CommentEntity findComment = commentRepository.findByIdCommentOrElseThrow(commentId);
-
+        // 조회한 댓글이 조회한 일정에 속하는지 확인 절차
         if (!findComment.getSchedule().getId().equals(scheduleId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Does not exist Comment");
+        }
+
+        // 댓글 작성자가 본인인지 확인
+        if (!findComment.getUser().getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You can only modify your own comment.");
         }
 
         commentRepository.delete(findComment);

@@ -57,8 +57,15 @@ public class CommentController {
     }
 
     @DeleteMapping("/{scheduleId}/comment/{commentId}")
-    public ResponseEntity<Void> deleteCommentById(@PathVariable Long scheduleId, @PathVariable Long commentId) {
-        commentService.deleteCommentById(scheduleId, commentId);
+    public ResponseEntity<Void> deleteCommentById(
+            @PathVariable Long scheduleId,
+            @PathVariable Long commentId,
+            HttpServletRequest servletRequest
+    ) {
+
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        commentService.deleteCommentById(scheduleId, commentId, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
