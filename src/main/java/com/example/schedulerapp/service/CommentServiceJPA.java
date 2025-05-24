@@ -26,16 +26,17 @@ public class CommentServiceJPA implements CommentService {
     private final CommentRepository commentRepository;
 
     @Override
-    public CommentResponseDto saveComment(Long id, CommentRequestDto requestDto) {
+    public CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto, Long userId) {
 
-        User findUser = userRepository.findUserByUsernameOrElseThrow(requestDto.getUsername());
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
+        User findUser = userRepository.findByIdOrElseThrow(userId);
+
+        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
 
         CommentEntity comment = new CommentEntity(requestDto.getComment());
-        comment.setUser(findUser);
-        comment.setSchedule(findSchedule);
+        comment.setUser(findUser); // 로그인 유저 설정
+        comment.setSchedule(findSchedule); // 조회한 일정 설정
 
-        CommentEntity savedComment = commentRepository.save(comment);
+        CommentEntity savedComment = commentRepository.save(comment); // 댓글 저장
 
         return new CommentResponseDto(savedComment.getId(), savedComment.getComment(), savedComment.getUser().getName());
     }

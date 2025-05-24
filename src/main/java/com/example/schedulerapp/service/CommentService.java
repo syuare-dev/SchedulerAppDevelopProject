@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentResponseDto saveComment(Long id, CommentRequestDto requestDto);
+    CommentResponseDto saveComment(Long scheduleId, CommentRequestDto requestDto, Long userId);
 
     List<CommentTimeIncludeResponseDto> findAllComments(Long scheduleId);
 

@@ -4,6 +4,7 @@ import com.example.schedulerapp.dto.commentDto.CommentRequestDto;
 import com.example.schedulerapp.dto.commentDto.CommentResponseDto;
 import com.example.schedulerapp.dto.commentDto.CommentTimeIncludeResponseDto;
 import com.example.schedulerapp.service.CommentService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{scheduleId}/comment")
-    public ResponseEntity<CommentResponseDto> saveComment (@PathVariable Long scheduleId, @RequestBody CommentRequestDto requestDto) {
+    public ResponseEntity<CommentResponseDto> saveComment (
+            @PathVariable Long scheduleId,
+            @RequestBody CommentRequestDto requestDto,
+            HttpServletRequest servletRequest
+    ) {
 
-        CommentResponseDto commentResponseDto = commentService.saveComment(scheduleId, requestDto);
+        Long userId = (Long) servletRequest.getSession(false).getAttribute("userId");
+
+        CommentResponseDto commentResponseDto = commentService.saveComment(scheduleId, requestDto, userId);
 
         return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
     }
