@@ -1,6 +1,7 @@
 package com.example.schedulerapp.entity;
 
 
+import com.example.schedulerapp.dto.commentDto.CommentEntityDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -39,4 +40,14 @@ public class CommentEntity extends BaseTimeEntity {
     public void updateComment (String comment) {
         this.comment = comment;
     }
+
+    public CommentEntityDto toDto() {
+        return new CommentEntityDto(
+                this.id,
+                this.comment,
+                this.user.getName(),
+                this.schedule.getId()
+        );
+    }
+
 }

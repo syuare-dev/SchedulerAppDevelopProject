@@ -24,6 +24,12 @@ public class CommentTimeIncludeResponseDto {
 
     private final LocalDateTime modifiedAt;
 
+    /**
+     * CommentEntity 객체 데이터를 CommentTimeIncludeResponseDto 객체로 변환하는 메서드(toDto)
+     * @param comment 변환할 CommentEntity 객체
+     * @return 변환된 CommentTimeIncludeResponseDto 객체
+     */
+
     public static CommentTimeIncludeResponseDto toDto (CommentEntity comment) {
         return new CommentTimeIncludeResponseDto(
                 comment.getId(),
