@@ -24,6 +24,7 @@ public class ScheduleTimeIncludedResponseDto {
 
     private final LocalDateTime modifiedAt;
 
+    // 해당 일정에 저장된 댓글 리스트
     private final List<CommentEntityDto> comments;
 
     public static ScheduleTimeIncludedResponseDto toDto (Schedule schedule) {
