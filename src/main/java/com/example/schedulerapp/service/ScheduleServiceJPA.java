@@ -1,6 +1,7 @@
 package com.example.schedulerapp.service;
 
 import com.example.schedulerapp.dto.scheduleDto.*;
+import com.example.schedulerapp.entity.CommentEntity;
 import com.example.schedulerapp.entity.Schedule;
 import com.example.schedulerapp.entity.User;
 import com.example.schedulerapp.repository.ScheduleRepository;
@@ -61,7 +62,15 @@ public class ScheduleServiceJPA implements ScheduleService {
     public ScheduleTimeIncludedResponseDto findByIdSchedule(Long id) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
 
-        return new ScheduleTimeIncludedResponseDto(findSchedule.getId(), findSchedule.getTitle(), findSchedule.getContents(), findSchedule.getUser().getName(), findSchedule.getCreatedAt(), findSchedule.getModifiedAt());
+        return new ScheduleTimeIncludedResponseDto(
+                findSchedule.getId(),
+                findSchedule.getTitle(),
+                findSchedule.getContents(),
+                findSchedule.getUser().getName(),
+                findSchedule.getCreatedAt(),
+                findSchedule.getModifiedAt(),
+                findSchedule.getComments().stream().map(CommentEntity::toDto).toList()
+        );
     }
 
     @Transactional

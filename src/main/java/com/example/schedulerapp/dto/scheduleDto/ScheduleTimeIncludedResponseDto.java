@@ -1,11 +1,16 @@
 package com.example.schedulerapp.dto.scheduleDto;
 
+import com.example.schedulerapp.dto.commentDto.CommentEntityDto;
+import com.example.schedulerapp.entity.CommentEntity;
 import com.example.schedulerapp.entity.Schedule;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@AllArgsConstructor
 public class ScheduleTimeIncludedResponseDto {
     private final Long id;
 
@@ -19,18 +24,7 @@ public class ScheduleTimeIncludedResponseDto {
 
     private final LocalDateTime modifiedAt;
 
-
-    public ScheduleTimeIncludedResponseDto
-            (Long id, String title, String contents, String username,
-            LocalDateTime createdAt, LocalDateTime modifiedAt)
-    {
-        this.id = id;
-        this.title = title;
-        this.contents = contents;
-        this.username = username;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-    }
+    private final List<CommentEntityDto> comments;
 
     public static ScheduleTimeIncludedResponseDto toDto (Schedule schedule) {
         return new ScheduleTimeIncludedResponseDto(
@@ -39,7 +33,8 @@ public class ScheduleTimeIncludedResponseDto {
                 schedule.getContents(),
                 schedule.getUser().getName(),
                 schedule.getCreatedAt(),
-                schedule.getModifiedAt()
+                schedule.getModifiedAt(),
+                schedule.getComments().stream().map(CommentEntity::toDto).toList()
         );
     }
 }
